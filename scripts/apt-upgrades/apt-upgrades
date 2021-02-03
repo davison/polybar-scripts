@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+. /etc/os-release
+
+total=$(apt list --upgradable 2> /dev/null | grep -c upgradable);
+security=$(apt list --upgradable 2> /dev/null | grep -c "${VERSION_CODENAME}-security");
+
+if [ "${security}" -gt 0 ]; then
+    echo "%{B#ff5555}%{F#f8f8f2} ${total} %{B- F-}"
+elif [ "${total}" -gt 0 ]; then
+    echo " ${total} "
+else
+    echo ""
+fi

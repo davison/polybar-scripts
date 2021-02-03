@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
+#
+# ░█▀█░█▀█░▀█▀░░░░░█░█░█▀█░█▀▀░█▀▄░█▀█░█▀▄░█▀▀░█▀▀
+# ░█▀█░█▀▀░░█░░▄▄▄░█░█░█▀▀░█░█░█▀▄░█▀█░█░█░█▀▀░▀▀█
+# ░▀░▀░▀░░░░▀░░░░░░▀▀▀░▀░░░▀▀▀░▀░▀░▀░▀░▀▀░░▀▀▀░▀▀▀
+#
 
+# shellcheck disable=SC1091
 . /etc/os-release
 
 total=$(apt list --upgradable 2> /dev/null | grep -c upgradable);

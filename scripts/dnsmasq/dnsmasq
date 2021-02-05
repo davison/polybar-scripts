@@ -14,9 +14,6 @@ die() {
 command=$1
 [[ -z $command ]] && command=hits
 
-# available commands supplied as an arg to this script are:
-# insertions, evictions, hits, misses, ratio
-
 # check dig is installed
 [[ -x $(command -v dig) ]] || die "No dig" 1
 

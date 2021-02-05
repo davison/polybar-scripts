@@ -1,4 +1,4 @@
-# script-name
+# squeezebox
 
 Given a Logitech Media Server (squeezebox) and a player name, displays the current song/station and artist information in the bar. Clicking the info in the polybar can be used as a way to toggle play/pause.
 

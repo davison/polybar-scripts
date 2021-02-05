@@ -10,7 +10,8 @@ You can use it as follows;
 [module/apt-upgrades]
 type = custom/script
 exec = ~/polybar-scripts/apt-upgrades
-format-prefix = "Apt: "
+format-prefix = "APT: "
+click-left = xterm -hold -e apt list --upgradable 
 interval = 600
 ```
 

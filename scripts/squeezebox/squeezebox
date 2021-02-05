@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+#
+# ░█▀▀░▄▀▄░█░█░█▀▀░█▀▀░▀▀█░█▀▀░█▀▄░█▀█░█░█
+# ░▀▀█░█\█░█░█░█▀▀░█▀▀░▄▀░░█▀▀░█▀▄░█░█░▄▀▄
+# ░▀▀▀░░▀\░▀▀▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀
+#
+
+from pysqueezebox import Server, Player
+import aiohttp
+import asyncio
+import json
+import sys
+
+# ip address of Logitech Media Server
+# should be converted to env var https://github.com/polybar/polybar/issues/2090
+SERVER = sys.argv[1]
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        lms = Server(session, SERVER)
+        player = await lms.async_get_player(name=sys.argv[2])
+        await player.async_update()
+
+        if len(sys.argv) > 3:
+            print(sys.argv)
+            await player.async_toggle_pause()
+                
+        try:
+            pos = player.time/player.duration*100
+        except:
+            pos = 0
+
+        # this formatting needs externalising to polybar config, at the very
+        # least to be able to pass it from there thru env vars
+        # see https://github.com/polybar/polybar/issues/2090
+        fg = "%{F#6272a4}" if player.mode != "play" else "%{F#f8f8f2}"
+        
+        print("{5}[ {0} ] [ {1} - {2} ({4:.0f}%) ] [ {3} ]".format(
+            player.name,
+            player.title,
+            player.album or "",
+            player.artist,
+            pos,
+            fg
+        ))
+        #print(json.dumps(player._status))
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())

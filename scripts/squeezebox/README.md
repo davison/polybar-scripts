@@ -2,6 +2,13 @@
 
 Given a Logitech Media Server (squeezebox) and a player name, displays the current song/station and artist information in the bar. Clicking the info in the polybar can be used as a way to toggle play/pause.
 
+Playing...
+![](./screenshot1.png)
+
+Paused...
+![](./screenshot2.png)
+
+
 ## Example Config
 
 You can use it as follows;

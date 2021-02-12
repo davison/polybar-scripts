@@ -10,12 +10,11 @@ die() {
     exit "$2"
 }
 
-# check args
-command=$1
-[[ -z $command ]] && command=hits
+# check args / set default
+command=${1:-hits}
 
-# check dig is installed
-[[ -x $(command -v dig) ]] || die "No dig" 1
+# check dig and bc are installed
+[[ $(command -v dig bc | wc -l) -eq 2 ]] || die "Missing dependencies" 1
 
 # check dnsmasq is running
 [[ $(pgrep dnsmasq > /dev/null) -eq 0 ]] || die "No dnsmasq" 2

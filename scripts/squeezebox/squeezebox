@@ -10,40 +10,46 @@ import aiohttp
 import asyncio
 import json
 import sys
+import os
 
-# ip address of Logitech Media Server
-# should be converted to env var https://github.com/polybar/polybar/issues/2090
-SERVER = sys.argv[1]
+server_name = os.getenv("SQUEEZEBOX_SERVER") or "audioserver"
+player_name = os.getenv("SQUEEZEBOX_PLAYER") or "Office"
+colour_playing = os.getenv("COLOUR_PLAYING") or "#ffffff"
+colour_paused = os.getenv("COLOUR_PAUSED") or "#cccccc"
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        lms = Server(session, SERVER)
-        player = await lms.async_get_player(name=sys.argv[2])
-        await player.async_update()
-
-        if len(sys.argv) > 3:
-            print(sys.argv)
-            await player.async_toggle_pause()
-                
         try:
-            pos = player.time/player.duration*100
-        except:
-            pos = 0
+            lms = Server(session, server_name)
+            player = await lms.async_get_player(name=player_name)
+            await player.async_update()
 
-        # this formatting needs externalising to polybar config, at the very
-        # least to be able to pass it from there thru env vars
-        # see https://github.com/polybar/polybar/issues/2090
-        fg = "%{F#6272a4}" if player.mode != "play" else "%{F#f8f8f2}"
-        
-        print("{5}[ {0} ] [ {1} - {2} ({4:.0f}%) ] [ {3} ]".format(
-            player.name,
-            player.title,
-            player.album or "",
-            player.artist,
-            pos,
-            fg
-        ))
-        #print(json.dumps(player._status))
+            if len(sys.argv) == 2:
+                await player.async_toggle_pause()
+            
+            try:
+                pos = player.time/player.duration*100
+            except:
+                pos = 0
+
+            fg = "%{F" + colour_paused + "}" if player.mode != "play" else "%{F" + colour_playing + "}"
+            
+            print("{5}[ {0} ] {1} / {2} ({3}) {4:.0f}%".format(
+                player.name,
+                player.title,
+                player.album or "",
+                player.artist,
+                pos,
+                fg
+            ))
+            #print(json.dumps(player._status))
+
+        except:
+            print("Unknown server ({0}) or player ({1})".format(
+                server_name, 
+                player_name
+            ))
 
 loop = asyncio.new_event_loop()
 loop.run_until_complete(main())
+

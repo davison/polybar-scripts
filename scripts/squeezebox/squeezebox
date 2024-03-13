@@ -34,7 +34,7 @@ async def main():
 
             fg = "%{F" + colour_paused + "}" if player.mode != "play" else "%{F" + colour_playing + "}"
             
-            print("{5}[ {0} ] {1} / {2} ({3}) {4:.0f}%".format(
+            print("{5}󰴸 {0} :: {1} / {2} ({3}) {4:.0f}%".format(
                 player.name,
                 player.title,
                 player.album or "",

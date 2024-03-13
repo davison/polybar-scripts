@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+# ░█▀█░█▀█░█▀▀░█▄█░█▀█░█▀█░░░░░█░█░█▀█░█▀▀░█▀▄░█▀█░█▀▄░█▀▀░█▀▀
+# ░█▀▀░█▀█░█░░░█░█░█▀█░█░█░▄▄▄░█░█░█▀▀░█░█░█▀▄░█▀█░█░█░█▀▀░▀▀█
+# ░▀░░░▀░▀░▀▀▀░▀░▀░▀░▀░▀░▀░░░░░▀▀▀░▀░░░▀▀▀░▀░▀░▀░▀░▀▀░░▀▀▀░▀▀▀
+#
+
+# relies on checkupdates script from the extra/pacman-contrib package
+
+command -v checkupdates > /dev/null || {
+    echo "please install pacman-contrib"
+    exit
+}
+
+set -o pipefail
+
+tot=$(checkupdates | wc -l)
+ret=$?
+
+if [ $ret -ge 2 ]; then 
+    # no updates
+    echo ""
+else
+    echo "$tot"
+fi
